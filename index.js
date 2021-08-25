@@ -5,7 +5,7 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const path = require("path");
 const { createServer } = require("http");
-const { auth, requiresAuth } = require("express-openid-connect"); // 👉 Replace this with express-openid-connect require 👈
+const { auth, requiresAuth } = require("express-openid-connect"); 
 const axios = require("axios").default;
 
 const {
@@ -44,11 +44,11 @@ app.use(
       authRequired: false, //👈 added config value
       auth0Logout: true,
       baseURL: APP_URL,
-     authorizationParams: {
-   response_type: "code id_token",
-   audience: "https://expenses-api",
-   })
-); // 👉 Replace this with auth middleware 👈
+      authorizationParams: {
+       response_type: "code id_token",
+       audience: "https://expenses-api"
+    })
+); 
 
 app.get("/", async (req, res, next) => {
  try {
@@ -84,8 +84,7 @@ app.get("/expenses", requiresAuth(), async (req, res, next) => {
     Authorization: `${token_type} ${access_token}`,
    },
   });
-  // 👆 end of changes 👆
-  res.render("expenses", {
+   res.render("expenses", {
    user: req.oidc && req.oidc.user,
    expenses: expenses.data,
   });
