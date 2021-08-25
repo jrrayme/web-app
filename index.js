@@ -46,7 +46,7 @@ app.use(
       baseURL: APP_URL,
       authorizationParams: {
        response_type: "code id_token",
-       audience: "https://expenses-api",
+       audience: "https://expenses-api"
     })
 ); 
 
@@ -81,7 +81,7 @@ app.get("/expenses", requiresAuth(), async (req, res, next) => {
   // 👇 then send it as an authorization header 👇
   const expenses = await axios.get(`${API_URL}/reports`, {
    headers: {
-    Authorization: `${token_type} ${access_token}`,
+    Authorization: `${token_type} ${access_token}`
    },
   });
   // 👆 end of changes 👆
