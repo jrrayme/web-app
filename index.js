@@ -44,6 +44,9 @@ app.use(
       authRequired: false, //👈 added config value
       auth0Logout: true,
       baseURL: APP_URL,
+     authorizationParams: {
+   response_type: "code id_token",
+   audience: "https://expenses-api",
    })
 ); // 👉 Replace this with auth middleware 👈
 
@@ -73,7 +76,15 @@ app.get("/user", requiresAuth(), async (req, res) => {
 
 app.get("/expenses", requiresAuth(), async (req, res, next) => {
  try {
-  const expenses = await axios.get(`${API_URL}/reports`);
+// 👇 get the token from the request 👇
+  const { token_type, access_token } = req.oidc.accessToken;
+  // 👇 then send it as an authorization header 👇
+  const expenses = await axios.get(`${API_URL}/reports`, {
+   headers: {
+    Authorization: `${token_type} ${access_token}`,
+   },
+  });
+  // 👆 end of changes 👆
   res.render("expenses", {
    user: req.oidc && req.oidc.user,
    expenses: expenses.data,
